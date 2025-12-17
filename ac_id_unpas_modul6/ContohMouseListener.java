@@ -1,3 +1,5 @@
+package ac_id_unpas_modul6;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;

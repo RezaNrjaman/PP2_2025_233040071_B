@@ -1,4 +1,4 @@
-package modul5;
+package ac_id_unpas_modul5;
 
 import java.awt.*;
 import javax.swing.*;

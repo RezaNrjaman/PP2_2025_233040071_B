@@ -1,3 +1,5 @@
+package ac_id_unpas_modul6;
+
 import java.awt.BorderLayout;
 import javax.swing.*;
 

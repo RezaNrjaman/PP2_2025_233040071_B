@@ -1,10 +1,12 @@
+package ac_id_unpas_modul7;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ManajemenNilaiSiswaApp extends JFrame {
+public class TugasModul7 extends JFrame {
     private JTextField txtNama;
     private JTextField txtNilai;
     private JComboBox<String> cmbMatkul;
@@ -12,7 +14,7 @@ public class ManajemenNilaiSiswaApp extends JFrame {
     private DefaultTableModel tableModel;
     private JTabbedPane tabbedPane;
 
-    public ManajemenNilaiSiswaApp() {
+    public TugasModul7() {
         // 1. Konfigurasi Frame Utama
         JFrame frame = new JFrame("Manajemen Nilai Siswa");
         setSize(500, 400);
@@ -55,9 +57,13 @@ public class ManajemenNilaiSiswaApp extends JFrame {
         txtNilai = new JTextField();
         panel.add(txtNilai);
 
+        // Tombol reset data
+        JButton btnReset = new JButton("Reset Data");
+        panel.add(btnReset);
+
+        // no 4a
         // Tombol Simpan
         JButton btnSimpan = new JButton("Simpan Data");
-        panel.add(new JLabel("")); // Placeholder kosong agar tomnbol di kanan
         panel.add(btnSimpan);
 
         // Event Handling Tombol Simpan
@@ -65,6 +71,17 @@ public class ManajemenNilaiSiswaApp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 prosesSimpan();
+            }
+        });
+
+        // no 4b
+        // Event Handling Tombol Reset
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtNama.setText("");
+                txtNilai.setText("");
+                cmbMatkul.setSelectedIndex(0);
             }
         });
         return panel;
@@ -83,6 +100,22 @@ public class ManajemenNilaiSiswaApp extends JFrame {
         JScrollPane scrollPane = new JScrollPane(tableData);
         panel.add(scrollPane, BorderLayout.CENTER);
 
+        // no 2
+        // menambahkan tombol hapus data
+        JButton btnHapus = new JButton("Hapus Data Terpilih");
+        panel.add(btnHapus, BorderLayout.SOUTH);
+        btnHapus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = tableData.getSelectedRow();
+                if (selectedRow > -1) {
+                    tableModel.removeRow(selectedRow);
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Pilih baris yang akan dihapus.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         return panel;
     }
 
@@ -97,6 +130,12 @@ public class ManajemenNilaiSiswaApp extends JFrame {
         if (nama.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nama siswa tidak boleh kosong.", "Error Validasi", JOptionPane.ERROR_MESSAGE);
             return; // Hentikan proses
+
+            // no 3
+            // validasi nama lebih dari 3 karakter
+        } else if (nama.trim().length() < 3) {
+            JOptionPane.showMessageDialog(null, "Nama siswa harus lebih dari 3 karakter.", "Error Validasi", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
         // validasi 2: cek apakah nilai berupa angka dan dalam range valid
@@ -111,15 +150,37 @@ public class ManajemenNilaiSiswaApp extends JFrame {
             JOptionPane.showMessageDialog(this, "Nilai harus berupa angka.", "Error Validasi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        // No 1
         // 3. Logika Bisnis (Menentukan Grade)
         String grade;
-        if (nilai >= 80) grade = "A";
-        else if (nilai >= 70) grade = "AB";
-        else if (nilai >= 60) grade = "B"; 
-        else if (nilai >= 50) grade = "BC";
-        else if (nilai >= 40) grade = "C";
-        else if (nilai >= 30) grade = "D";
-        else grade = "E";
+
+        int nilaiMatkul = nilai/10;
+        switch (nilaiMatkul) {
+            case 10:
+            case 9:
+            case 8:
+                grade = "A";
+                break;
+            case 7:
+                grade = "AB";
+                break;
+            case 6:
+                grade = "B";
+                break;
+            case 5:
+                grade = "BC";
+                break;
+            case 4:
+                grade = "C";
+                break;
+            case 3:
+                grade = "D";
+                break;
+            default:
+                grade = "E";
+                break;
+        }
 
         // 4. Masukkan ke Tabel (Upadate Model)
         Object[] dataBaris = {nama, matkul, nilai, grade};
@@ -136,8 +197,7 @@ public class ManajemenNilaiSiswaApp extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new ManajemenNilaiSiswaApp().setVisible(true);
+            new TugasModul7().setVisible(true);
         });
     }
 }
-
